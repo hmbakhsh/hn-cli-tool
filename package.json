@@ -1,0 +1,23 @@
+{
+  "name": "hn-cli-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "t"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmbakhsh/hn-cli-tool.git"
+  },
+  "author": "hmbakhsh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hmbakhsh/hn-cli-tool/issues"
+  },
+  "homepage": "https://github.com/hmbakhsh/hn-cli-tool#readme",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "jsdom": "^24.1.0"
+  }
+}

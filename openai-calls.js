@@ -2,7 +2,7 @@ const { OpenAI } = require("openai");
 const jsdom = require("jsdom");
 const { Readability } = require("@mozilla/readability");
 
-const openai = new OpenAI({ apiKey: "sk-proj-qviIVk4v2JTDGSnbzQBYT3BlbkFJR9VGI5g6otK4Ngd1JDHT" });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function getSummary(article) {
 	try {

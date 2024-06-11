@@ -1,39 +1,19 @@
 const jsdom = require("jsdom");
 
-// ACTUALLY FETCHING HN
-// fetch("https://news.ycombinator.com")
-// 	.then((res) => res.text())
-// 	.then((res) => {
-// 		let parsedHTML = new jsdom.JSDOM(res);
-// 		console.log(parsedHTML.window.document.querySelector("html").innerHTML);
-// 	});
-
-// RETURNED RESPONSE FROM HN -> HN.HTML
-
-// let testParsedHTML = new jsdom.JSDOM(fs.readFile("./hn.html"));
-// console.log(testParsedHTML);
-
 class hackerNewsPost {
 	constructor(indexNumber, articleName, link) {
 		indexNumber, articleName, link;
 	}
 }
 
+// HTML DATA FROM NEWS.YCOMBINATOR.COM (STATIC TO PREVENT SPAMMING NETWORK REQUESTS WHILE TESTING)
 const fs = require("fs");
 const hnHTML = fs.readFileSync("./hn.html", "utf-8");
 const testParsedHTML = new jsdom.JSDOM(hnHTML);
 
-const hackerNewsPosts = [];
+const hackerNewsPostsArray = [];
 
-// Returns a NodeList
-const tdElements = testParsedHTML.window.document.querySelectorAll(".athing");
-tdElements.forEach((e) => {
-	const articleInformation = parseArticleInformation(e.textContent);
-	const articleLink = e.querySelector(".titleline a").href;
-	hackerNewsPosts.push([...articleInformation, articleLink]);
-});
-
-function parseArticleInformation(str) {
+function parseArticleData(str) {
 	const regexPattern = /(\d+).(.+)/;
 	const regexMatched = str.match(regexPattern);
 
@@ -42,12 +22,32 @@ function parseArticleInformation(str) {
 	return [index, postTitle];
 }
 
-console.log(hackerNewsPosts);
+// <TD> ELEMENTS FROM HN HTML FILE, RETURNS A NODELIS
+const tdElements = testParsedHTML.window.document.querySelectorAll(".athing");
 
-function getPosts(hackerNewsPosts) {
-	hackerNewsPosts.forEach((hackerNewsPost) => {
-		console.log(`${hackerNewsPost[0]} ${hackerNewsPost[1]}`);
+// Parses NodeList & pushes individual articles to hackerNewsPostsArray
+tdElements.forEach((e) => {
+	const articleInformation = parseArticleData(e.textContent);
+	const articleLink = e.querySelector(".titleline a").href;
+	hackerNewsPostsArray.push([...articleInformation, articleLink]);
+});
+
+function getPosts(number = 30) {
+	console.log("");
+	const filteredHackerNewsPostsList = hackerNewsPostsArray.filter((e, index) => {
+		return index < number;
+	});
+	filteredHackerNewsPostsList.forEach((hackerNewsPost) => {
+		console.log(`[${hackerNewsPost[0]}] ${hackerNewsPost[1]}`);
+		console.log(`${hackerNewsPost[2]}`);
+		console.log("");
 	});
 }
 
-getPosts(hackerNewsPosts);
+function getSinglePost(postIndex) {
+	return hackerNewsPosts[postIndex];
+}
+
+// ! Add Link Summary -> Call OpenAI API for link summary (some link validation shit? youtube videos? don't send this maybe?)
+
+module.exports = { getPosts, getSinglePost };
